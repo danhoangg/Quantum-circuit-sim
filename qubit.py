@@ -67,26 +67,24 @@ class Quantum_Circuit:
         self.qubits = argv
         self.states = []
         self.createStates()
+    def cnot(self, control, target):
+        for i, amp in enumerate(self.states):
+            if str(bin(i)[2:].zfill(self.length))[control-1] == '1':
+                pos = i + (2**(self.length-target))
+                print(pos)
+                if pos > self.length:
+                    break
+                self.states[i] = self.states[pos]
+                self.states[pos] = amp
+                print(amp)
 
-'initialise qubits      
-q1 = Qubit(1, 0)
-q2 = Qubit(1, 0)
+q1 = Qubit(0,1)
+q2 = Qubit(0.5, 0.5)
 
-'initialise the circuit using these qubits
-circuit = Quantum_Circuit(q1,q2)
-circuit.state()
+circuit = Quantum_Circuit(q1, q2)
 
-'apply hadamard gate to qubit 1
-q1.gate('H')
-'apply not gate to qubit 2
-q2.gate('X')
-
-'update the circuit with new qubit
-circuit.update(q1, q2)
-'print state of the two qubits combined
-circuit.state()
-'print probabilities of each state being outputted when measured
-circuit.probs()
-'measure both qubits at once
 circuit.measure()
-print(circuit.result)
+circuit.state()
+circuit.probs()
+print(circuit.result[0])
+print(circuit.result[1])
